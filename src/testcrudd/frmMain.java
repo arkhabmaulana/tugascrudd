@@ -151,7 +151,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(edit);
-        edit.setBounds(610, 90, 80, 30);
+        edit.setBounds(620, 90, 80, 30);
 
         save.setText("SAVE");
         save.addActionListener(new java.awt.event.ActionListener() {
@@ -160,7 +160,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(save);
-        save.setBounds(240, 90, 80, 30);
+        save.setBounds(250, 90, 80, 30);
 
         delete.setText("DELETE");
         delete.addActionListener(new java.awt.event.ActionListener() {
@@ -169,7 +169,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(delete);
-        delete.setBounds(330, 90, 80, 30);
+        delete.setBounds(340, 90, 80, 30);
 
         clear.setText("CLEAR");
         clear.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +178,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(clear);
-        clear.setBounds(420, 90, 80, 30);
+        clear.setBounds(430, 90, 80, 30);
 
         refresh.setText("REFRESH");
         refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -187,7 +187,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(refresh);
-        refresh.setBounds(510, 90, 90, 30);
+        refresh.setBounds(520, 90, 90, 30);
 
         tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
