@@ -5,7 +5,12 @@
  */
 package testcrudd;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -43,7 +48,7 @@ public class frmMain extends javax.swing.JFrame {
         email = new javax.swing.JTextField();
         nis = new javax.swing.JTextField();
         nama = new javax.swing.JTextField();
-        kelas = new javax.swing.JTextField();
+        thn_lahir = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         alamat = new javax.swing.JTextArea();
         perempuan = new javax.swing.JRadioButton();
@@ -55,6 +60,12 @@ public class frmMain extends javax.swing.JFrame {
         refresh = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabel = new javax.swing.JTable();
+        kelas = new javax.swing.JTextField();
+        tgl_lahir = new javax.swing.JTextField();
+        bln_lahir = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -69,9 +80,9 @@ public class frmMain extends javax.swing.JFrame {
         jLabel2.setBounds(10, 40, 180, 30);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Alamat");
+        jLabel3.setText("Tahun Lahir");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(10, 360, 110, 40);
+        jLabel3.setBounds(350, 490, 110, 40);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Isian Data Siswa");
@@ -108,8 +119,8 @@ public class frmMain extends javax.swing.JFrame {
         nis.setBounds(10, 140, 160, 30);
         getContentPane().add(nama);
         nama.setBounds(10, 190, 160, 30);
-        getContentPane().add(kelas);
-        kelas.setBounds(10, 290, 160, 30);
+        getContentPane().add(thn_lahir);
+        thn_lahir.setBounds(350, 520, 160, 30);
 
         alamat.setColumns(20);
         alamat.setRows(5);
@@ -180,21 +191,26 @@ public class frmMain extends javax.swing.JFrame {
 
         tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "NIS", "NamaSiswa", "JenisKelamin", "Kelas", "Email", "Alamat"
+                "NIS", "NamaSiswa", "JenisKelamin", "Kelas", "Email", "Alamat", "Tanggal Lahir", "Bulan Lahir", "Tahun Lahir"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tabel);
@@ -205,12 +221,35 @@ public class frmMain extends javax.swing.JFrame {
             tabel.getColumnModel().getColumn(3).setResizable(false);
             tabel.getColumnModel().getColumn(4).setResizable(false);
             tabel.getColumnModel().getColumn(5).setResizable(false);
+            tabel.getColumnModel().getColumn(6).setResizable(false);
+            tabel.getColumnModel().getColumn(7).setResizable(false);
         }
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(230, 140, 452, 330);
+        jScrollPane2.setBounds(230, 140, 700, 330);
+        getContentPane().add(kelas);
+        kelas.setBounds(10, 290, 160, 30);
+        getContentPane().add(tgl_lahir);
+        tgl_lahir.setBounds(10, 520, 160, 30);
+        getContentPane().add(bln_lahir);
+        bln_lahir.setBounds(180, 520, 160, 30);
 
-        setSize(new java.awt.Dimension(731, 546));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setText("Alamat");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(10, 360, 110, 40);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel11.setText("Tanggal Lahir");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(10, 490, 110, 40);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setText("Bulan Lahir");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(180, 490, 110, 40);
+
+        setSize(new java.awt.Dimension(965, 619));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -220,7 +259,7 @@ public class frmMain extends javax.swing.JFrame {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
-        if("".equals(nis.getText()) || "".equals(alamat.getText()) || "".equals(kelas.getText()) || "".equals(nama.getText()) || "".equals(email.getText()))
+        if("".equals(nis.getText()) || "".equals(nama.getText()) || "".equals(kelas.getText()) || "".equals(email.getText()) || "".equals(alamat.getText()) || "".equals(tgl_lahir.getText()) || "".equals(bln_lahir.getText()) || "".equals(thn_lahir.getText()))
         {
             JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
         } 
@@ -232,7 +271,7 @@ public class frmMain extends javax.swing.JFrame {
                 } else {
                     JK = "P";
                 }
-            String SQL = "INSERT INTO t_siswa (NIS,NamaSiswa,JenisKelamin,Kelas,TahunMasuk,Status,Absen,Email,Alamat)" + "VALUES('" + nis.getText()+"','"+ nama.getText()+"','"+ JK +"','"+ kelas.getText()+"','"+ email.getText()+"','"+ alamat.getText()+"')";
+            String SQL = "INSERT INTO t_siswa (NIS,NamaSiswa,JenisKelamin,Kelas,Email,Alamat,tgl_lahir,bln_lahir,thn_lahir)" + "VALUES('" + nis.getText()+"','"+ nama.getText()+"','"+ JK +"','"+ kelas.getText()+"','"+ email.getText()+"','"+ alamat.getText()+"','"+ tgl_lahir.getText()+"','"+ bln_lahir.getText()+"','"+ thn_lahir.getText()+"')";
             int status = KoneksiDB.execute(SQL);
             if(status==1){
                 JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan", "Sukses", JOptionPane.INFORMATION_MESSAGE);
@@ -262,12 +301,15 @@ public class frmMain extends javax.swing.JFrame {
 
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
         // TODO add your handling code here:
-        nama.setText("");
         nis.setText("");
+        nama.setText("");
         buttonGroup1.clearSelection();
         kelas.setText("");
         email.setText("");
         alamat.setText("");
+        tgl_lahir.setText("");
+        bln_lahir.setText("");
+        thn_lahir.setText("");
     }//GEN-LAST:event_clearActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
@@ -277,7 +319,7 @@ public class frmMain extends javax.swing.JFrame {
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         // TODO add your handling code here:
-        if("".equals(nis.getText()) || "".equals(alamat.getText()) || "".equals(kelas.getText()) || "".equals(nama.getText()) || "".equals(email.getText())){
+        if("".equals(nis.getText()) || "".equals(nama.getText()) || "".equals(kelas.getText()) || "".equals(email.getText()) || "".equals(alamat.getText()) || "".equals(tgl_lahir.getText()) || "".equals(bln_lahir.getText()) || "".equals(thn_lahir.getText())){
             JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
         } else{
             String JK = "";
@@ -289,9 +331,12 @@ public class frmMain extends javax.swing.JFrame {
            String SQL = "UPDATE t_siswa SET " 
                 + "NamaSiswa='"+nama.getText()+"' ,"
                 + "JenisKelamin='"+ JK +"' ,"
-                + "Kelas='"+kelas.getText()+"' ,"
+                + "Kelas='"+thn_lahir.getText()+"' ,"
                 + "Email='"+email.getText()+"' ,"
-                + "Alamat='"+alamat.getText()+"' WHERE NIS='"+nis.getText()+"'";
+                + "Alamat='"+alamat.getText()+"' ,"
+                + "tgl_lahir='"+tgl_lahir.getText()+"' ,"
+                + "bln_lahir='"+bln_lahir.getText()+"' ,"
+                + "thn_lahir='"+thn_lahir.getText()+"' WHERE NIS='"+nis.getText()+"'";
         int status = KoneksiDB.execute(SQL);
         if(status==1){
             JOptionPane.showMessageDialog(this, "Data berasil diupdate", "Sukses", JOptionPane.INFORMATION_MESSAGE);
@@ -301,6 +346,28 @@ public class frmMain extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_editActionPerformed
+
+    private void tabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelMouseClicked
+        // TODO add your handling code here:
+        int baris = tabel.getSelectedRow();
+        
+        if(baris != 1){
+            nis.setText(tabel.getValueAt(baris, 0).toString());
+            nama.setText(tabel.getValueAt(baris, 1).toString());
+            if("Laki-laki".equals(tabel.getValueAt(baris, 2).toString())){
+                laki.setSelected(true);
+            }else{
+                perempuan.setSelected(true);
+            
+            }
+            kelas.setText(tabel.getValueAt(baris, 3).toString());
+            email.setText(tabel.getValueAt(baris, 4).toString());
+            alamat.setText(tabel.getValueAt(baris, 5).toString());
+             tgl_lahir.setText(tabel.getValueAt(baris, 6).toString());
+              bln_lahir.setText(tabel.getValueAt(baris, 7).toString());
+               thn_lahir.setText(tabel.getValueAt(baris, 8).toString());
+        }
+    }//GEN-LAST:event_tabelMouseClicked
 
     /**
      * @param args the command line arguments
@@ -339,12 +406,16 @@ public class frmMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea alamat;
+    private javax.swing.JTextField bln_lahir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton clear;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JTextField email;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -364,9 +435,37 @@ public class frmMain extends javax.swing.JFrame {
     private javax.swing.JButton refresh;
     private javax.swing.JButton save;
     private javax.swing.JTable tabel;
+    private javax.swing.JTextField tgl_lahir;
+    private javax.swing.JTextField thn_lahir;
     // End of variables declaration//GEN-END:variables
 
     private void selectData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String kolom[] = {"NIS","NamaSiswa","JenisKelamin","Kelas","Email","Alamat","tgl_lahir","bln_lahir","thn_lahir"};
+        DefaultTableModel dtm = new DefaultTableModel(null, kolom);
+        String SQL = "SELECT * FROM t_siswa";
+        ResultSet rs = KoneksiDB.executeQuery(SQL);
+        try{
+            while(rs.next()){
+                String NIS = rs.getString(1);
+                String NamaSiswa = rs.getString(2);
+                String JenisKelamin = "";
+                if("L".equals(rs.getString(3))) {
+                    JenisKelamin = "Laki-Laki";
+                } else{
+                    JenisKelamin = "Perempuan";
+                }
+                String Kelas = rs.getString(4);
+                String Email = rs.getString(5);
+                String Alamat = rs.getString(6);
+                String tgl_lahir = rs.getString(7);
+                String bln_lahir = rs.getString(8);
+                String thn_lahir = rs.getString(9);
+                String data[] = {NIS,NamaSiswa,JenisKelamin,Kelas,Email,Alamat,tgl_lahir,bln_lahir,thn_lahir};
+                dtm.addRow(data);
+            }
+        } catch(SQLException ex){
+            Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tabel.setModel(dtm);
     }
 }
